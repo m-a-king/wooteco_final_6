@@ -20,47 +20,50 @@ public class WorkerSelector {
     }
 
     public Worker selectWorker(DateInfo dateInfo) {
-        Worker currentWorker = getCurrentUser(dateInfo);
+        Worker currentWorker = selectOrDeferredWorker(dateInfo);
 
-        if (isSameAsPreviousWorker(currentWorker)) {
+        if (isWorkerSameAsPrevious(currentWorker)) {
             deferredWorker = previousWorker;
-            currentWorker = selectWeekendWorker();
+            currentWorker = selectWorkerByDayType(dateInfo);
         }
 
         previousWorker = currentWorker;
         return currentWorker;
     }
 
-    private Worker getCurrentUser(DateInfo dateInfo) {
+    private Worker selectOrDeferredWorker(DateInfo dateInfo) {
         if (!deferredWorker.getName().equals(EMPTY)) {
-            return assignDeferredWorker();
+            return retrieveDeferredWorker();
         }
 
-        if (dateInfo.isHoliday()) {
-            return selectWeekendWorker();
-        }
-
-        return selectWeekdayWorker();
+        return selectWorkerByDayType(dateInfo);
     }
 
-    private Worker assignDeferredWorker() {
+    private Worker selectWorkerByDayType(DateInfo dateInfo) {
+        if (dateInfo.isHoliday()) {
+            return getNextWeekendWorker();
+        }
+
+        return getNextWeekdayWorker();
+    }
+
+    private Worker retrieveDeferredWorker() {
         Worker worker = deferredWorker;
         deferredWorker = new Worker(EMPTY);
         return worker;
     }
 
-    private Worker selectWeekdayWorker() {
+    private Worker getNextWeekdayWorker() {
         weekdayWorkerIdx = weekdayWorkerIdx % weekdayWorkers.size();
         return weekdayWorkers.get(weekdayWorkerIdx++);
     }
 
-    private Worker selectWeekendWorker() {
+    private Worker getNextWeekendWorker() {
         weekendWorkerIdx = weekendWorkerIdx % weekendWorkers.size();
         return weekendWorkers.get(weekendWorkerIdx++);
     }
 
-    private boolean isSameAsPreviousWorker(Worker currentWorker) {
+    private boolean isWorkerSameAsPrevious(Worker currentWorker) {
         return currentWorker.getName().equals(previousWorker.getName());
     }
-
 }
