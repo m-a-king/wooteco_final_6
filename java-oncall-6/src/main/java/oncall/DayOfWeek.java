@@ -34,21 +34,11 @@ public enum DayOfWeek {
                 return dayOfWeek;
             }
         }
-        throw new IllegalStateException(INVALID_INPUT.getMessage());
+        throw new IllegalArgumentException(INVALID_INPUT.getMessage());
     }
 
-    public DayOfWeek getDayAfter(int count) {
-        count %= DAYS_OF_WEEK;
-        int targetSeq = (this.seq + count - 1) % DAYS_OF_WEEK;
-        if (targetSeq == 0) {
-            return this;
-        }
-
-        for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
-            if (dayOfWeek.seq == targetSeq) {
-                return dayOfWeek;
-            }
-        }
-        throw new IllegalStateException(INVALID_INPUT.getMessage());
+    public DayOfWeek getNextDayOfWeek() {
+        int targetIdx = (this.seq) % DAYS_OF_WEEK;
+        return DayOfWeek.values()[targetIdx];
     }
 }

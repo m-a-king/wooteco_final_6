@@ -11,24 +11,25 @@ public class Validator {
     private Validator() {
     }
 
-    public static boolean validateWorker(List<String> weekdayWorkers, List<String> weekendWorkers) {
-        try {
-            Set<String> distinctWeekdayWorkers = new HashSet<>(weekdayWorkers);
-            Set<String> distinctWeekendWorkers = new HashSet<>(weekendWorkers);
-
-            checkDuplicate(weekdayWorkers, weekendWorkers, distinctWeekdayWorkers, distinctWeekendWorkers);
-            compareWeekdayAndWeekend(distinctWeekdayWorkers, distinctWeekendWorkers);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+    public static void validateMonthAndDayOfWeek(String[] monthAndDayOfWeek) {
+        if (monthAndDayOfWeek.length != 2) {
+            throw new IllegalArgumentException(INVALID_INPUT.getMessage());
         }
-
-        return true;
     }
 
-    private static void checkDuplicate(List<String> weekdayWorkers,
-                                       List<String> weekendWorkers,
-                                       Set<String> distinctWeekdayWorkers,
-                                       Set<String> distinctWeekendWorkers
+    public static void validateWorker(List<Worker> weekdayWorkers, List<Worker> weekendWorkers) {
+        Set<Worker> distinctWeekdayWorkers = new HashSet<>(weekdayWorkers);
+        Set<Worker> distinctWeekendWorkers = new HashSet<>(weekendWorkers);
+
+        checkDuplicate(weekdayWorkers, weekendWorkers, distinctWeekdayWorkers, distinctWeekendWorkers);
+        compareWeekdayAndWeekend(distinctWeekdayWorkers, distinctWeekendWorkers);
+        checkWorkerCount(distinctWeekdayWorkers.size() > 35);
+    }
+
+    private static void checkDuplicate(List<Worker> weekdayWorkers,
+                                       List<Worker> weekendWorkers,
+                                       Set<Worker> distinctWeekdayWorkers,
+                                       Set<Worker> distinctWeekendWorkers
 
     ) {
         if (weekdayWorkers.size() != distinctWeekdayWorkers.size()) {
@@ -40,11 +41,17 @@ public class Validator {
         }
     }
 
-    private static void compareWeekdayAndWeekend(Set<String> distinctWeekdayWorkers,
-                                                 Set<String> distinctWeekendWorkers) {
+    private static void compareWeekdayAndWeekend(Set<Worker> distinctWeekdayWorkers,
+                                                 Set<Worker> distinctWeekendWorkers) {
         if (distinctWeekdayWorkers.equals(distinctWeekendWorkers)) {
             return;
         }
         throw new IllegalArgumentException(INVALID_INPUT.getMessage());
+    }
+
+    private static void checkWorkerCount(boolean distinctWeekdayWorkers) {
+        if (distinctWeekdayWorkers) {
+            throw new IllegalArgumentException(INVALID_INPUT.getMessage());
+        }
     }
 }

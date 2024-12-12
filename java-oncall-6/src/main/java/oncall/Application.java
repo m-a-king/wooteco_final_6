@@ -2,6 +2,8 @@ package oncall;
 
 import camp.nextstep.edu.missionutils.Console;
 
+import java.lang.Exception;
+
 public class Application {
     public static void main(String[] args) {
 
@@ -9,7 +11,12 @@ public class Application {
                 new WorkerSelector()
         );
 
-        oncallController.run();
-        Console.close();
+        try {
+            oncallController.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Console.close();
+        }
     }
 }

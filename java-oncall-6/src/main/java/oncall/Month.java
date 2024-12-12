@@ -1,5 +1,7 @@
 package oncall;
 
+import static oncall.Exception.INVALID_INPUT;
+
 public enum Month {
     JAN(1, 31),
     FEB(2, 28),
@@ -37,7 +39,7 @@ public enum Month {
                 return calender;
             }
         }
-        throw new IllegalArgumentException("[ERROR] 유효하지 않은 입력 값입니다. 다시 입력해 주세요.\n");
+        throw new IllegalArgumentException(INVALID_INPUT.getMessage());
     }
 
 }

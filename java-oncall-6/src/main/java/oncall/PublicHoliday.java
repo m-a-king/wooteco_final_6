@@ -1,6 +1,6 @@
 package oncall;
 
-public enum Holiday {
+public enum PublicHoliday {
     SIN_JUNG(Month.JAN, 1),
     SAM_IL(Month.MAR, 1),
     CHILD(Month.MAY, 5),
@@ -14,7 +14,7 @@ public enum Holiday {
     private final Month month;
     private final int day;
 
-    Holiday(Month month, int day) {
+    PublicHoliday(Month month, int day) {
         this.month = month;
         this.day = day;
     }
@@ -28,8 +28,8 @@ public enum Holiday {
     }
 
     public static boolean isHoliday(Month month, int day) {
-        for (Holiday holiday : Holiday.values()) {
-            if (holiday.month == month && holiday.day == day) {
+        for (PublicHoliday publicHoliday : PublicHoliday.values()) {
+            if (publicHoliday.month == month && publicHoliday.day == day) {
                 return true;
             }
         }

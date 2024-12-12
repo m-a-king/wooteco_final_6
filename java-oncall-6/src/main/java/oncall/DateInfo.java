@@ -2,8 +2,18 @@ package oncall;
 
 public final class DateInfo {
     private final Month month;
-    private int day;
-    private DayOfWeek dayOfWeek;
+    private final int day;
+    private final DayOfWeek dayOfWeek;
+
+    public DateInfo(
+            Month month,
+            int day,
+            DayOfWeek startDayOfWeek
+    ) {
+        this.month = month;
+        this.day = day;
+        this.dayOfWeek = startDayOfWeek;
+    }
 
     public DateInfo(
             Month month,
@@ -15,10 +25,21 @@ public final class DateInfo {
     }
 
     public boolean isHoliday() {
-        return Holiday.isHoliday(this.month, this.day);
+        return isPublicHoliday() || isWeekend();
     }
 
-    public
+    public boolean isPublicHoliday() {
+        return PublicHoliday.isHoliday(this.month, this.day);
+    }
+
+    public DateInfo nextDay() {
+        if (this.day >= month.getEndDay()) {
+            throw new IllegalStateException();
+        }
+        DayOfWeek nextDayOfWeek = dayOfWeek.getNextDayOfWeek();
+        int nextDay = day + 1;
+        return new DateInfo(month, nextDay, nextDayOfWeek);
+    }
 
     public Month getMonth() {
         return month;
@@ -30,6 +51,10 @@ public final class DateInfo {
 
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
+    }
+
+    private boolean isWeekend() {
+        return this.dayOfWeek == DayOfWeek.SAT || this.dayOfWeek == DayOfWeek.SUN;
     }
 
 }
